@@ -1,35 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace LFTC___LABORATOR_4
 {
     class Program
     {
         static Grammar grammar;
+        static Dictionary<Tuple<string, string>, int> parsingTable;
         static string inputSequence;
 
-        static void MenuOption(int opt)
+        static void ReadFromFiles(string option)
         {
             string grammarFile = "";
 
-            switch (opt)
+            if (option == "1")
             {
-                case 1:
-                    grammarFile = "basicGrammar.txt";
-                    string inputSequenceFile = "inputSequence.txt";
+                grammarFile = "basicGrammar.txt";
+                string inputSequenceFile = "inputSequence.txt";
 
-                    ReadGrammarFromFile(grammarFile);
-                    ReadInputSequenceFromFile(inputSequenceFile);
-                    break;
-                case 2:
-                    grammarFile = "minilanguageGrammar.txt";
-                    string programInternalFormFile = "programInternalForm.txt";
+                ReadGrammarFromFile(grammarFile);
+                ReadInputSequenceFromFile(inputSequenceFile);
+            }
+            else
+            {
+                grammarFile = "minilanguageGrammar.txt";
+                string programInternalFormFile = "programInternalForm.txt";
 
-                    ReadGrammarFromFile(grammarFile);
-                    ReadProgramInternalFormFromFile(programInternalFormFile);
-                    break;
-                default:
-                    break;
+                ReadGrammarFromFile(grammarFile);
+                ReadProgramInternalFormFromFile(programInternalFormFile);
             }
         }
 
@@ -199,8 +200,17 @@ namespace LFTC___LABORATOR_4
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Terminal to show productions of : ");
-            grammar.GetProductionContainingTerminal(Console.ReadLine());
+            Console.WriteLine();
+            Console.WriteLine("Generated Parsing Table: ");
+
+            Dictionary<Tuple<string, string>, int> parsingTable = grammar.GenerateParsingTable();
+
+            foreach (KeyValuePair<Tuple<string, string>, int> kv in parsingTable)
+                Console.WriteLine(kv.Key.Item1 + " & " + kv.Key.Item2 + " - " + kv.Value);
+
+            Console.WriteLine();
+            Console.WriteLine("Parsing Algorithm: ");
+            grammar.ApplyLL1(inputSequence);
             Console.ReadLine();
         }
 
@@ -217,7 +227,7 @@ namespace LFTC___LABORATOR_4
             option = Console.ReadLine();
             Console.WriteLine();
 
-            MenuOption(Int32.Parse(option));
+            ReadFromFiles(option);
             WriteToConsole();
         }
     }

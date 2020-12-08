@@ -272,6 +272,7 @@ namespace LFTC___LABORATOR_4
 
         public void ApplyLL1(string inputSequence)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Dictionary<Tuple<string, string>, int> parsingTable = GenerateParsingTable();
 
             Stack<string> productionsStack = new Stack<string>();
@@ -294,6 +295,10 @@ namespace LFTC___LABORATOR_4
 
                 if (pair.Item1 == pair.Item2)
                 {
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine($"({String.Join("", inputSequenceStack.ToArray())},\t{String.Join("", productionsStack.ToArray())},\t{String.Join("", productionString)})");
+
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine("POP " + productionsStack.Peek() + " " + inputSequenceStack.Peek());
 
                     productionsStack.Pop();
@@ -304,7 +309,12 @@ namespace LFTC___LABORATOR_4
                 {
                     if (parsingTable.ContainsKey(pair))
                     {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine($"({String.Join("", inputSequenceStack.ToArray())},\t{String.Join("", productionsStack.ToArray())},\t{String.Join("", productionString)})");
+
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
                         Console.Write("POP " + productionsStack.Peek() + " and PUSH ");
+
                         productionsStack.Pop();
 
                         List<string> rightHandSide = Productions[parsingTable[pair] - 1].RightHandSide;
@@ -348,7 +358,7 @@ namespace LFTC___LABORATOR_4
                     productionsStack.Pop();
                 }
             }
-
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Write("Production String -> "); productionString.ForEach(s => Console.Write(s));
             if (productionsStack.Count == 0)
                 Console.WriteLine("\nSuccess!");
